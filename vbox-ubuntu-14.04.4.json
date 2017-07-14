@@ -1,0 +1,64 @@
+{
+    "builders": [
+        {
+        "type": "virtualbox-iso",
+        "guest_os_type": "Ubuntu_64",
+        "guest_additions_mode": "attach",
+        "guest_additions_path": "/Applications/VirtualBox.app/Contents/MacOS/VboxGuestAdditions.iso",
+        "vm_name": "packer-ubuntu-14.04.4-amd64",
+        "virtualbox_version_file": ".vbox_version",
+        "iso_url": "/Users/mmcconnell/Downloads/ubuntu-14.04.4-server-amd64.iso",
+        "iso_checksum": "2ac1f3e0de626e54d05065d6f549fa3a",
+        "iso_checksum_type": "md5",
+        "output_directory": "packer-ubuntu-14.04-amd64-vbox",
+        "ssh_username": "vagrant",
+        "ssh_password": "vagrant",
+        "http_directory": "preseed",
+        "http_port_min": "8001",
+        "http_port_max": "8001",
+        "disk_size": "20000",
+        "hard_drive_interface": "sata",
+        "vboxmanage": [
+		   [
+			"modifyvm",
+			"{{.Name}}",
+			"--memory",
+			"2048"
+		   ],
+		   [
+		 	"modifyvm",
+		  	"{{.Name}}",
+		  	"--cpus",
+		  	"1"
+		]
+	    ],
+        "export_opts":
+         [   
+             "--manifest",
+             "--vsys", "0",
+             "--description", "{{user `vm_description`}}",
+             "--version", "{{user `vm_version`}}"
+             ],
+         "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
+         "boot_wait": "15s",
+		 "boot_command": [
+             "<esc><esc><enter><wait>",
+             "/install/vmlinuz ",
+             "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+             "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+             "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+             "keyboard-configuration/variant=USA console-setup/ask-detect=false ",
+             "hostname={{.Name}} ",
+             "fb=false debconf/frontend=noninteractive ",
+             "initrd=/install/initrd.gz -- <enter>"
+         ]
+       } 
+    ],
+    
+    "post-processors": [
+       {
+            "output": "builds/{{.Provider}}-ubuntu1404.box",
+            "type": "vagrant"
+           }
+       ]
+}
