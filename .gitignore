@@ -1,2 +1,5 @@
+aws/
 builds/
+packer_cache/
 vars.txt
+.DS_Store

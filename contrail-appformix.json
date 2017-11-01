@@ -11,7 +11,7 @@
                                                 "source_ami": "ami-b828ead8",
                                                       "instance_type": "t2.2xlarge",
                                                             "ssh_username": "ubuntu",
-                                                                  "ami_name": "mm-packer {{timestamp}}"
+                                                                  "ami_name": "mm-packer-{{timestamp}}"
                                                                       }
                                                                         ],
                                                                           "provisioners": [
